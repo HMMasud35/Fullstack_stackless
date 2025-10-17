@@ -12,7 +12,7 @@ let tokenCheckMiddelware = (req, res, next) => {
             .status(400)
             .json({
               success: false,
-              message: err.message
+              message: "access denid"
             })
         } else {
           req.userdata = decoded
@@ -24,7 +24,7 @@ let tokenCheckMiddelware = (req, res, next) => {
       .status(500)
       .json({
         success: false,
-        message: "Unauthorize"
+        message: err.message
       })
   }
 }
@@ -32,12 +32,13 @@ let tokenCheckMiddelware = (req, res, next) => {
 let adminCheck = (req, res, next) => {
   if (req.userdata.role == "admin") {
     next()
+  
   } else {
     return res
       .status(400)
       .json({
         success: false,
-        message: "access denid"
+        message: "Unauthrize"
       })
   }
 }

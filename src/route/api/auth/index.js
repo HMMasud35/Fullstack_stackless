@@ -4,6 +4,7 @@ const {
   alluserController,
   verifyOtpController,
   loginController,
+  logoutController,
 } = require("../../../controller/authController");
 const {
   tokenCheckMiddelware,
@@ -19,5 +20,6 @@ router.get("/userlist",
   adminCheck,
   alluserController
 )
+router.post("/logout", logoutController)
 
 module.exports = router

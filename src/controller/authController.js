@@ -158,28 +158,50 @@ const loginController = async (req, res, next) => {
 // get all user
 const alluserController = async (req, res, next) => {
   try {
-    let allusers = await signupModel.find({}).select("-password")
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "all users fetch successfull",
-        data: allusers
-      })
+      let allusers = await signupModel.find({}).select("-password")
+      return res
+        .status(200)
+        .json({
+          success: true,
+          message: "all users fetch successfull",
+          data: allusers
+        })
+    
   } catch (error) {
     return res
       .status(500)
       .json({
         success: false,
-        message: err.message || err
+        message: "Unauthrize"
       })
   }
+}
 
+// logout
+const logoutController = async (req, res, next) => {
+  req.session.destroy(function (err) {
+    if (err) {
+      return res
+        .status(500)
+        .json({
+          success: false,
+          message: err,
+        })
+    } else {
+      return res
+        .status(200)
+        .json({
+          success: true,
+          message: "Logout successfull",
+        })
+    }
+  })
 }
 
 module.exports = {
   signupController,
   alluserController,
   verifyOtpController,
-  loginController
+  loginController,
+  logoutController
 }
