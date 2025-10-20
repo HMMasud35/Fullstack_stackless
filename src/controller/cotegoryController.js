@@ -1,25 +1,32 @@
-const bannerModel = require("../model/banner.model");
+const categoryModel = require("../model/category.model");
 const fs = require("fs")
 const path = require("path")
+const slugify = require('slugify')
 
-// Added Banner
-const bannerController = async (req, res) => {
-  let { link } = req.body
-  let { filename } = req.file
-
+// Added Category
+const categoryController = async (req, res) => {
   try {
-    let banner = await new bannerModel({
-      image: `${process.env.SERVER_URL}/${filename}`,
-      link
+    let { name } = req.body
+    let { filename } = req.file
+    let slug = slugify(name, {
+      replacement: '-',
+      remove: undefined,
+      lower: true,
+      trim: true
     })
-    await banner.save()
+
+    let category = new categoryModel({
+      image: `${process.env.SERVER_URL}/${filename}`,
+      name,
+      slug
+    })
+    await category.save()
     return res
       .status(201)
       .json({
         success: true,
-        message: "Banner created successfull",
-        data: banner
-
+        message: "Category created successfull",
+        data: category
       })
 
   } catch (error) {
@@ -32,12 +39,12 @@ const bannerController = async (req, res) => {
   }
 }
 
-// Delete Banner
-const deleteBannerController = async (req, res) => {
+// Delete Category
+const deleteCategoryController = async (req, res) => {
   try {
     let { id } = req.params
-    let deletebanner = await bannerModel.findOneAndDelete({ _id: id })
-    let imageurl = deletebanner.image.split("/")
+    let deleteCategory = await categoryModel.findOneAndDelete({ _id: id })
+    let imageurl = deleteCategory.image.split("/")
     let filepath = path.join(__dirname, "../../uploads/")
     fs.unlink(`${filepath}/${imageurl[imageurl.length - 1]}`, (err) => {
       if (err) {
@@ -53,28 +60,28 @@ const deleteBannerController = async (req, res) => {
       .status(200)
       .json({
         success: true,
-        message: "Banner delete successfull"
+        message: "Category delete successfull"
       })
   } catch (error) {
     return res
       .status(500)
       .json({
         success: false,
-        message: error.message || error
+        message: "Category not found"
       })
   }
 }
 
-// Update Banner
-const updatebannerController = async (req, res) => {
+// Update Category
+const updateCategoryController = async (req, res) => {
   try {
     let { id } = req.params
     let { filename } = req.file
 
-    let updatebanner = await bannerModel.findOne({ _id: id })
+    let updateCategory = await categoryModel.findOne({ _id: id })
 
-    if (updatebanner) {
-      let imageurl = updatebanner.image.split("/")
+    if (updateCategory) {
+      let imageurl = updateCategory.image.split("/")
       let filepath = path.join(__dirname, "../../uploads/")
 
       fs.unlink(`${filepath}/${imageurl[imageurl.length - 1]}`, (err) => {
@@ -87,20 +94,20 @@ const updatebannerController = async (req, res) => {
             })
         }
       })
-      updatebanner.image = `${process.env.SERVER_URL}/${filename}`
-      await updatebanner.save()
+      updateCategory.image = `${process.env.SERVER_URL}/${filename}`
+      await updateCategory.save()
       return res
         .status(200)
         .json({
           success: true,
-          message: "Banner Update successfull"
+          message: "Category Update successfull"
         })
     } else {
       return res
         .status(404)
         .json({
           success: false,
-          message: "Banner not found"
+          message: "Category not found"
         })
     }
   } catch (error) {
@@ -113,32 +120,32 @@ const updatebannerController = async (req, res) => {
   }
 }
 
-// Get Banner
-const allBannersController = async (req, res) => {
+// Get Category
+const allCategoryController = async (req, res) => {
   try {
-    let allbanners = await bannerModel.find({})
+    let allCategory = await categoryModel.find({})
 
     return res
       .status(200)
       .json({
         success: true,
-        message: "All Banner fetched successfull",
-        data: allbanners
+        message: "All Category fetched successfull",
+        data: allCategory
       })
   } catch (error) {
     return res
       .status(500)
       .json({
         success: false,
-        message:  "Banner not found"
+        message: "Category not found"
       })
   }
 }
 
 
 module.exports = {
-  bannerController,
-  deleteBannerController,
-  updatebannerController,
-  allBannersController
+  categoryController,
+  deleteCategoryController,
+  updateCategoryController,
+  allCategoryController
 }
