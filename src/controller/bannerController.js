@@ -96,6 +96,10 @@ const updatebannerController = async (req, res) => {
           message: "Banner Update successfull"
         })
     } else {
+      let newFilePath = path.join(__dirname, "../../uploads", filename);
+      fs.unlink(newFilePath, (err) => {
+        if (err) console.log("Failed to delete unused file:", err);
+      })
       return res
         .status(404)
         .json({
@@ -130,7 +134,7 @@ const allBannersController = async (req, res) => {
       .status(500)
       .json({
         success: false,
-        message:  "Banner not found"
+        message: "Banner not found"
       })
   }
 }

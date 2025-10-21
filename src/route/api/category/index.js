@@ -10,7 +10,7 @@ const {
   deleteCategoryController,
   updateCategoryController,
   allCategoryController
-} = require("../../../controller/cotegoryController");
+} = require("../../../controller/categoryController");
 
 router.post("/addCategory",
   // tokenCheckMiddelware,
@@ -23,7 +23,7 @@ router.delete("/deleteCategory/:id",
 //   adminCheck,
   deleteCategoryController
 )
-router.patch("/updateCategory/:id",
+router.put("/updateCategory/:id",
 //   tokenCheckMiddelware,
 //   adminCheck,
   upload.single("Categoryimg"),
