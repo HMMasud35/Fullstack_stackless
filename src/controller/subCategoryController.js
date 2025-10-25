@@ -4,7 +4,7 @@ const fs = require("fs")
 const path = require("path")
 const slugify = require('slugify')
 
-// Added Category
+// Added SubCategory
 const subCategoryController = async (req, res) => {
   try {
     let { name, category } = req.body
@@ -21,7 +21,7 @@ const subCategoryController = async (req, res) => {
       category
     })
 
-    let updateCategory = await categoryModel.findOneAndUpdate({ _id:category },
+    let updateCategory = await categoryModel.findOneAndUpdate({ _id: category },
       { $push: { subcategory: subcategory._id } })
 
 
@@ -31,7 +31,7 @@ const subCategoryController = async (req, res) => {
       .status(201)
       .json({
         success: true,
-        message: "SubCategory created successfull",
+        message: "Sub Category created successfull",
         data: subcategory
       })
 
@@ -45,99 +45,31 @@ const subCategoryController = async (req, res) => {
   }
 }
 
-// Delete Category
-const deleteCategoryController = async (req, res) => {
+// Delete SubCategory
+const deleteSubCategoryController = async (req, res) => {
   try {
     let { id } = req.params
-    let deleteCategory = await categoryModel.findOneAndDelete({ _id: id })
-    let imageurl = deleteCategory.image.split("/")
-    let filepath = path.join(__dirname, "../../uploads/")
-    fs.unlink(`${filepath}/${imageurl[imageurl.length - 1]}`, (err) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({
-            success: false,
-            message: err.message || err
-          })
-      }
-    })
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Category delete successfull"
-      })
-  } catch (error) {
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Category not found"
-      })
-  }
-}
+    let deleteSubCategory = await subCategoryModel.findByIdAndDelete({ id })
 
-// Update Category
-const updateCategoryController = async (req, res) => {
-  try {
-    let { id } = req.params
-    let { filename } = req.file
-    let { name } = req.body
+    if (deleteSubCategory) {
+      let updateCategory = await categoryModel.findOneAndUpdate({ subcategory: id },
+        { $pull: { subcategory: id } })
 
-    if (!name && !filename) {
+      await updateCategory.save()
+
       return res
-        .status(404)
+        .status(200)
         .json({
-          success: false,
-          message: "Category name and image are required"
+          success: true,
+          message: "Sub Category delete successfull"
         })
     } else {
-      let updateCategory = await categoryModel.findById(id)
-
-      if (updateCategory) {
-        let imageurl = updateCategory.image.split("/")
-        let oldfilepath = path.join(__dirname, "../../uploads/")
-
-        fs.unlink(`${oldfilepath}/${imageurl[imageurl.length - 1]}`, (err) => {
-          if (err) {
-            return res
-              .status(500)
-              .json({
-                success: false,
-                message: err.message || err
-              })
-          }
+      return res
+        .status(500)
+        .json({
+          success: false,
+          message: "Sub Category not found"
         })
-        let slug = slugify(name, {
-          replacement: '-',
-          remove: undefined,
-          lower: true,
-          trim: true
-        })
-
-        updateCategory.image = `${process.env.SERVER_URL}/${filename}`,
-          updateCategory.name = name,
-          updateCategory.slug = slug
-        await updateCategory.save()
-        return res
-          .status(200)
-          .json({
-            success: true,
-            message: "Category Update successfull"
-          })
-      } else {
-        let newFilePath = path.join(__dirname, "../../uploads", filename);
-        fs.unlink(newFilePath, (err) => {
-          if (err) console.log("Failed to delete unused file:", err);
-        });
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: "Category not found"
-          })
-      }
     }
   } catch (error) {
     return res
@@ -149,17 +81,56 @@ const updateCategoryController = async (req, res) => {
   }
 }
 
-// Get Category
-const allCategoryController = async (req, res) => {
+// Update SubCategory
+const updateSubCategoryController = async (req, res) => {
   try {
-    let allCategory = await categoryModel.find({})
+    let { id } = req.params
+    let { name } = req.body
+    let slug = slugify(name, {
+      replacement: '-',
+      remove: undefined,
+      lower: true,
+      trim: true
+    })
+
+    if (!name) {
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "Sub Category name is required"
+        })
+    } else {
+      let updateSubCategory = await subCategoryModel.findByIdAndUpdate(id , { name, slug })
+      await updateSubCategory.save()
+      return res
+        .status(200)
+        .json({
+          success: true,
+          message: "Sub Category Update successfull"
+        })
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        success: false,
+        message: error.message || error
+      })
+  }
+}
+
+// Get SubCategory
+const allSubCategoryController = async (req, res) => {
+  try {
+    let allSubCategory = await subCategoryModel.find({})
 
     return res
       .status(200)
       .json({
         success: true,
-        message: "All Category fetched successfull",
-        data: allCategory
+        message: "All Sub Category fetched successfull",
+        data: allSubCategory
       })
   } catch (error) {
     return res
@@ -174,7 +145,7 @@ const allCategoryController = async (req, res) => {
 
 module.exports = {
   subCategoryController,
-  deleteCategoryController,
-  updateCategoryController,
-  allCategoryController
+  deleteSubCategoryController,
+  updateSubCategoryController,
+  allSubCategoryController
 }

@@ -6,28 +6,29 @@ const {
 } = require("../../../utils/authMiddelware");
 const upload = require("../../../utils/uplods");
 const {
-  subCategoryController
+  subCategoryController,
+  deleteSubCategoryController,
+  updateSubCategoryController,
+  allSubCategoryController,
 } = require("../../../controller/subCategoryController");
 
 router.post("/addSubcategory",
   // tokenCheckMiddelware,
   // adminCheck,
-  upload.single("subcategoryimg"),
   subCategoryController
 )
-// router.delete("/deleteCategory/:id",
-//   //   tokenCheckMiddelware,
-//   //   adminCheck,
-//   deleteCategoryController
-// )
-// router.put("/updateCategory/:id",
-//   //   tokenCheckMiddelware,
-//   //   adminCheck,
-//   upload.single("Categoryimg"),
-//   updateCategoryController
-// )
-// router.get("/allCategory",
-//   allCategoryController
-// )
+router.delete("/deleteSubCategory/:id",
+  //   tokenCheckMiddelware,
+  //   adminCheck,
+  deleteSubCategoryController
+)
+router.patch("/updateSubCategory/:id",
+  //   tokenCheckMiddelware,
+  //   adminCheck,
+  updateSubCategoryController
+)
+router.get("/allSubCategory",
+  allSubCategoryController
+)
 
 module.exports = router
