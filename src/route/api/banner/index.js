@@ -7,26 +7,28 @@ const {
 } = require("../../../controller/bannerController");
 const router = express.Router()
 const {
-  tokenCheckMiddelware,
-  adminCheck
+  // tokenCheckMiddelware,
+  // adminCheck
 } = require("../../../utils/authMiddelware");
 const upload = require("../../../utils/uplods");
 
 router.post("/addbanner",
-  tokenCheckMiddelware,
-  adminCheck,
+  // tokenCheckMiddelware,
+  // adminCheck,
   upload.single("bannerimg"),
   bannerController)
 router.delete("/deletebanner/:id",
-  tokenCheckMiddelware,
-  adminCheck,
+  // tokenCheckMiddelware,
+  // adminCheck,
   deleteBannerController)
 router.patch("/updatebanner/:id",
-  tokenCheckMiddelware,
-  adminCheck,
+  // tokenCheckMiddelware,
+  // adminCheck,
   upload.single("bannerimg"),
   updatebannerController)
 router.get("/allBanners",
+  // tokenCheckMiddelware,
+  // adminCheck,
   allBannersController)
 
 module.exports = router

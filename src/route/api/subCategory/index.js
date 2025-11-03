@@ -28,6 +28,8 @@ router.patch("/updateSubCategory/:id",
   updateSubCategoryController
 )
 router.get("/allSubCategory",
+  // tokenCheckMiddelware,
+  // adminCheck,
   allSubCategoryController
 )
 

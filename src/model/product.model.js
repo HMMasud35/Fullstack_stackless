@@ -3,17 +3,17 @@ const { default: mongoose } = require("mongoose");
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
-    // required: [true, "Name is Required"],
-    // unique: [true, "Unique Name is Required"]
+    required: [true, "Name is Required"],
+    unique: [true, "Unique Name is Required"]
   },
-   discription: {
+  discription: {
     type: String,
-    // required: [true, "Discription is Required"],
+    required: [true, "Discription is Required"],
   },
   image: {
-    type: String,
-    // required: [true, "Image is Required"],
-    // unique: [true, "Unique image is Required"]
+    type: Array,
+    required: [true, "Image is Required"],
+    unique: [true, "Unique image is Required"]
   },
   slug: {
     type: String,
@@ -28,22 +28,27 @@ const productSchema = new mongoose.Schema({
   },
   stock: {
     type: Number,
-    // required: [true, "Stock is Required"],
+    required: [true, "Stock is Required"],
   },
-   price: {
+  price: {
     type: Number,
-    // required: [true, "Price is Required"],
+    required: [true, "Price is Required"],
   },
-   discountprice: {
+  discountprice: {
     type: Number
   },
+  review: [
+    {
+      type: String
+    }
+  ],
   variantType: {
     type: String,
     enum: ["singleVariant", "multiVariant"]
   },
-  variants : [
+  variants: [
     {
-      type:mongoose.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       ref: "Variant"
     }
   ]

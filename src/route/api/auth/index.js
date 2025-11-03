@@ -7,8 +7,8 @@ const {
   logoutController,
 } = require("../../../controller/authController");
 const {
-  tokenCheckMiddelware,
-  adminCheck
+  // tokenCheckMiddelware,
+  // adminCheck
 } = require("../../../utils/authMiddelware");
 const router = express.Router()
 
@@ -16,8 +16,8 @@ router.post("/signup", signupController)
 router.post("/verify-otp", verifyOtpController)
 router.post("/login", loginController)
 router.get("/userlist",
-  tokenCheckMiddelware,
-  adminCheck,
+  // tokenCheckMiddelware,
+  // adminCheck,
   alluserController
 )
 router.post("/logout", logoutController)

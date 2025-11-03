@@ -19,17 +19,19 @@ router.post("/addCategory",
   categoryController
 )
 router.delete("/deleteCategory/:id",
-//   tokenCheckMiddelware,
-//   adminCheck,
+  //   tokenCheckMiddelware,
+  //   adminCheck,
   deleteCategoryController
 )
 router.put("/updateCategory/:id",
-//   tokenCheckMiddelware,
-//   adminCheck,
+  //   tokenCheckMiddelware,
+  //   adminCheck,
   upload.single("Categoryimg"),
   updateCategoryController
 )
 router.get("/allCategory",
+  // tokenCheckMiddelware,
+  // adminCheck,
   allCategoryController
 )
 
