@@ -123,7 +123,10 @@ const updateSubCategoryController = async (req, res) => {
 // Get SubCategory
 const allSubCategoryController = async (req, res) => {
   try {
-    let allSubCategory = await subCategoryModel.find({})
+    let allSubCategory = await subCategoryModel.find({}).populate({
+      path: "category",
+      select: "name slug"
+    })
 
     return res
       .status(200)

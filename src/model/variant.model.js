@@ -1,12 +1,16 @@
 const { default: mongoose } = require("mongoose");
 
 const variantSchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Types.ObjectId,
+    ref: "Product"
+  },
   size: {
     type: String,
-    unique: [true, "Unique Name is Required"]
   },
   stock: {
-    type: Number
+    type: Number,
+    default: 1
   }
 }, { timestamps: true })
 

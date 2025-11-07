@@ -5,11 +5,17 @@ const banner = require("./banner")
 const category = require("./category")
 const subCategory = require("./subCategory")
 const product = require("./product")
+const variant = require("./variant")
+const coupon = require("./coupon")
+const cart = require("./cart")
 
 router.use("/auth", auth)
 router.use("/banner", banner)
 router.use("/category", category)
 router.use("/subcategory", subCategory)
 router.use("/product", product)
+router.use("/variant", variant)
+router.use("/coupon", coupon)
+router.use("/cart", cart)
 
 module.exports = router

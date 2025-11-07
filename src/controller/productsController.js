@@ -186,13 +186,17 @@ const allProductController = async (req, res) => {
     let allProduct = await productModel.find({}).populate([
       {
         path: "subcategory",
-        select: "name slug"
+        select: "name slug -_id"
       },
       {
         path: "category",
-        select: "name slug"
+        select: "name slug -_id"
+      },
+      {
+        path: "variants",
+        select: "size stock -_id"
       }
-    ])
+    ]).sort({createdAt:-1})
 
     return res
       .status(200)
